@@ -28,7 +28,14 @@ public class RequisicaoHTTP extends AsyncTask<String, Void, Object> {
 			String url = params[0];
 
 			try {
-				HttpClient cliente = new DefaultHttpClient();
+				// Definindo tempo limite para tentativa de conexao
+				final HttpParams httpParam = new BasicHttpParams();
+				HttpConnectionParams.setConnectionTimeout(httpParam,
+						TEMPO_LIMITE_CONEXAO);
+				HttpConnectionParams.setSoTimeout(httpParam,
+						TEMPO_LIMITE_CONEXAO);
+
+				HttpClient cliente = new DefaultHttpClient(httpParam);
 				HttpGet requisicao = new HttpGet();
 
 				requisicao.setHeader("Content-Type",
