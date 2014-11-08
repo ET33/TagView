@@ -8,11 +8,17 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class RequisicaoHTTP extends AsyncTask<String, Void, Object> {
+
+	// tempo limite de 10 segundos para conexao
+	static final int TEMPO_LIMITE_CONEXAO = 5000;
 
 	@Override
 	// primeiro parametro = sigla da moeda
@@ -42,8 +48,9 @@ public class RequisicaoHTTP extends AsyncTask<String, Void, Object> {
 
 				return dados;
 			} catch (Exception e) {
-				e.printStackTrace();
+				return "";
 			}
+
 		}
 		return null;
 	}

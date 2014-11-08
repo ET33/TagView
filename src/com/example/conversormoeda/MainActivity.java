@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -95,9 +94,28 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		try {
 
 			// Obtem-se o JSon a partir da classe auxiliar que faz a requisicao
-			// à API
+			// à APIc
 			String json = (String) new RequisicaoHTTP().execute(url).get();
 
+			if (json.isEmpty()){
+				AlertDialog alerta;
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+				builder.setTitle("Erro de conexão");
+				builder.setMessage("Ocorreu um erro durante a conexão com o servidor. Por favor, tente novamente mais tarde");
+				builder.setPositiveButton("Ok",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// Apenas volta para o programa.
+							}
+						});
+
+				alerta = builder.create();
+				alerta.show();
+			}
+			
 			Gson gson = new Gson();
 
 			// Converte o json obtido para classe Moeda
@@ -105,42 +123,22 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 
 			// Converte o valor para reais
 			BigDecimal resultado = new BigDecimal(valor);
-			//double resultado = Double.parseDouble(valor);
-			resultado = resultado.multiply(new BigDecimal(String.valueOf(moeda.getRate())));
+			BigDecimal rate = new BigDecimal(String.valueOf(moeda.getRate()));
+			
+			resultado = resultado.multiply(rate);
+			
+			//Formata saida para 2 decimais
 			resultado = resultado.setScale(2, RoundingMode.CEILING);
-
-			// Formata saida para 2 decimais
-			//BigDecimal resultadoFinal = new BigDecimal(String.valueOf(resultado));
-			//resultadoFinal = resultadoFinal.setScale(BigDecimal.ROUND_CEILING);
-			//Toast.makeText(getApplicationContext(), resultadoFinal.toString(), 2)
-			//.show();
 
 			// Informa a conversao para o usuario
 			TextView valorFinal = (TextView) findViewById(R.id.txt_resultado);
-			valorFinal.setText(valor + " " + sigla + " = "
-					+ resultado + " " + MOEDA_ALVO);
+			valorFinal.setText(valor + " " + sigla + " = " + resultado + " "
+					+ MOEDA_ALVO);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			AlertDialog alerta;
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-			builder.setTitle("Erro de conexão");
-			builder.setMessage("Ocorreu um erro durante a conexão com o servidor. Por favor, tente novamente mais tarde");
-			builder.setPositiveButton("Ok",
-					new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// Apenas volta para o programa.
-						}
-					});
-
-			alerta = builder.create();
-			alerta.show();
 
 		}
 
-	}
+	}	
 
 }
