@@ -42,7 +42,7 @@ public class RequisicaoHTTP extends AsyncTask<String, Void, Object> {
 
 				return dados;
 			} catch (Exception e) {
-				Log.i("EXCEPTION", "ESDFGHJ");
+				e.printStackTrace();
 			}
 		}
 		return null;

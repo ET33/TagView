@@ -1,5 +1,8 @@
 package com.example.conversormoeda;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -81,7 +84,8 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		EditText edValor = (EditText) findViewById(R.id.edit_valor);
 		String valor = edValor.getText().toString();
 		if (valor.isEmpty()) {
-			Toast.makeText(getApplicationContext(), "Valor não informado", 2).show();
+			Toast.makeText(getApplicationContext(), "Valor não informado", 2)
+					.show();
 			return;
 		}
 
@@ -100,15 +104,24 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			Moeda moeda = gson.fromJson(json, Moeda.class);
 
 			// Converte o valor para reais
-			double resultado = Double.parseDouble(valor);
-			resultado = resultado * moeda.getRate();
+			BigDecimal resultado = new BigDecimal(valor);
+			//double resultado = Double.parseDouble(valor);
+			resultado = resultado.multiply(new BigDecimal(String.valueOf(moeda.getRate())));
+			resultado = resultado.setScale(2, RoundingMode.CEILING);
+
+			// Formata saida para 2 decimais
+			//BigDecimal resultadoFinal = new BigDecimal(String.valueOf(resultado));
+			//resultadoFinal = resultadoFinal.setScale(BigDecimal.ROUND_CEILING);
+			//Toast.makeText(getApplicationContext(), resultadoFinal.toString(), 2)
+			//.show();
 
 			// Informa a conversao para o usuario
 			TextView valorFinal = (TextView) findViewById(R.id.txt_resultado);
-			valorFinal.setText(valor + " " + sigla + " = " + resultado + " "
-					+ MOEDA_ALVO);
+			valorFinal.setText(valor + " " + sigla + " = "
+					+ resultado + " " + MOEDA_ALVO);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			AlertDialog alerta;
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
