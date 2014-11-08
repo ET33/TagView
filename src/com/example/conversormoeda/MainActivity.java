@@ -97,7 +97,27 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			// à APIc
 			String json = (String) new RequisicaoHTTP().execute(url).get();
 
-			if (json.isEmpty()){
+			Gson gson = new Gson();
+
+			// Converte o json obtido para classe Moeda
+			Moeda moeda = gson.fromJson(json, Moeda.class);
+
+			// Converte o valor para reais
+			BigDecimal resultado = new BigDecimal(valor);
+			BigDecimal rate = new BigDecimal(String.valueOf(moeda.getRate()));
+
+			resultado = resultado.multiply(rate);
+
+			// Formata saida para 2 decimais
+			resultado = resultado.setScale(2, RoundingMode.CEILING);
+
+			// Informa a conversao para o usuario
+			TextView valorFinal = (TextView) findViewById(R.id.txt_resultado);
+			valorFinal.setText(valor + " " + sigla + " = " + resultado + " "
+					+ MOEDA_ALVO);
+
+		} catch (Exception e) {
+			if (e instanceof SemConexaoException) {
 				AlertDialog alerta;
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -107,39 +127,16 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 						new DialogInterface.OnClickListener() {
 
 							@Override
-							public void onClick(DialogInterface dialog, int which) {
+							public void onClick(DialogInterface dialog,
+									int which) {
 								// Apenas volta para o programa.
 							}
 						});
 
 				alerta = builder.create();
 				alerta.show();
-				return;
 			}
-			
-			Gson gson = new Gson();
-
-			// Converte o json obtido para classe Moeda
-			Moeda moeda = gson.fromJson(json, Moeda.class);
-
-			// Converte o valor para reais
-			BigDecimal resultado = new BigDecimal(valor);
-			BigDecimal rate = new BigDecimal(String.valueOf(moeda.getRate()));
-			
-			resultado = resultado.multiply(rate);
-			
-			//Formata saida para 2 decimais
-			resultado = resultado.setScale(2, RoundingMode.CEILING);
-
-			// Informa a conversao para o usuario
-			TextView valorFinal = (TextView) findViewById(R.id.txt_resultado);
-			valorFinal.setText(valor + " " + sigla + " = " + resultado + " "
-					+ MOEDA_ALVO);
-
-		} catch (Exception e) {
-
 		}
-
-	}	
+	}
 
 }
