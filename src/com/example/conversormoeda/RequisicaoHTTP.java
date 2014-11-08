@@ -18,7 +18,7 @@ import android.util.Log;
 public class RequisicaoHTTP extends AsyncTask<String, Void, Object> {
 
 	// tempo limite de 10 segundos para conexao
-	static final int TEMPO_LIMITE_CONEXAO = 3000;
+	static final int TEMPO_LIMITE_CONEXAO = 5000;
 
 	@Override
 	// primeiro parametro = sigla da moeda
@@ -55,8 +55,7 @@ public class RequisicaoHTTP extends AsyncTask<String, Void, Object> {
 
 				return dados;
 			} catch (Exception e) {
-				throw new SemConexaoException(
-						"Erro ao tentar se conectar ao servidor");
+				return "";
 			}
 
 		}
