@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Conversor de Moedas</string>
+    <string name="edit_valor">Valor</string>
+    <string name="action_settings">Settings</string>
+    <string name="spinner_titulo">Selecione uma moeda</string>
+    <string name="btn_converte">Converter</string>
+
+</resources>
