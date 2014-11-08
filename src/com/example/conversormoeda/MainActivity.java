@@ -114,6 +114,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 
 				alerta = builder.create();
 				alerta.show();
+				return;
 			}
 			
 			Gson gson = new Gson();
