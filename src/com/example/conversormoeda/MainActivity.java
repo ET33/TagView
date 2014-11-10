@@ -84,7 +84,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		EditText edValor = (EditText) findViewById(R.id.edit_valor);
 		String valor = edValor.getText().toString();
 		if (valor.isEmpty()) {
-			Toast.makeText(getApplicationContext(), "Valor não informado", 2)
+			Toast.makeText(getApplicationContext(), "Valor nï¿½o informado", 2)
 					.show();
 			return;
 		}
@@ -95,30 +95,10 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		try {
 
 			// Obtem-se o JSon a partir da classe auxiliar que faz a requisicao
-			// à APIc
+			// ï¿½ APIc
 			String json = (String) new RequisicaoHTTP(getApplicationContext())
 					.execute(url).get();
 
-			if (json.isEmpty()) {
-				AlertDialog alerta;
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-				builder.setTitle("Erro de conexão");
-				builder.setMessage("Ocorreu um erro durante a conexão com o servidor. Por favor, tente novamente mais tarde");
-				builder.setPositiveButton("Ok",
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								// Apenas volta para o programa.
-							}
-						});
-
-				alerta = builder.create();
-				alerta.show();
-				return;
-			}
 
 			Gson gson = new Gson();
 
