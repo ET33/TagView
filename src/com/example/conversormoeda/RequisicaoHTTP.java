@@ -12,13 +12,23 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class RequisicaoHTTP extends AsyncTask<String, Void, Object> {
-
+	
+	private Context contexto;
 	// tempo limite de 10 segundos para conexao
 	static final int TEMPO_LIMITE_CONEXAO = 5000;
+	
+	
+	public RequisicaoHTTP(Context c){
+		this.contexto = c;
+	}
+	
 
 	@Override
 	// primeiro parametro = sigla da moeda
@@ -41,8 +51,10 @@ public class RequisicaoHTTP extends AsyncTask<String, Void, Object> {
 				requisicao.setHeader("Content-Type",
 						"text/plain; charset=utf-8");
 				requisicao.setURI(new URI(url));
-
+				
+				Log.i("EXCEPTION1", "msg");
 				HttpResponse resposta = cliente.execute(requisicao);
+				Log.i("EXCEPTION2", "msg");
 
 				BufferedReader br = new BufferedReader(new InputStreamReader(
 						resposta.getEntity().getContent()));
@@ -55,9 +67,25 @@ public class RequisicaoHTTP extends AsyncTask<String, Void, Object> {
 
 				return dados;
 			} catch (Exception e) {
-				return "";
-			}
+				Log.i("EXCEPTION3", "msg");
+				AlertDialog alerta;
+				AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
 
+				builder.setTitle("Erro de conexão");
+				builder.setMessage("Ocorreu um erro durante a conexão com o servidor. Por favor, tente novamente mais tarde");
+				builder.setPositiveButton("Ok",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// Apenas volta para o programa.
+							}
+						});
+
+				alerta = builder.create();
+				alerta.show();
+			}
 		}
 		return null;
 	}

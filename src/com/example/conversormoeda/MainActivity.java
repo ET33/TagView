@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -95,9 +96,10 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 
 			// Obtem-se o JSon a partir da classe auxiliar que faz a requisicao
 			// à APIc
-			String json = (String) new RequisicaoHTTP().execute(url).get();
+			String json = (String) new RequisicaoHTTP(getApplicationContext())
+					.execute(url).get();
 
-			if (json.isEmpty()){
+			if (json.isEmpty()) {
 				AlertDialog alerta;
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -107,7 +109,8 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 						new DialogInterface.OnClickListener() {
 
 							@Override
-							public void onClick(DialogInterface dialog, int which) {
+							public void onClick(DialogInterface dialog,
+									int which) {
 								// Apenas volta para o programa.
 							}
 						});
@@ -116,7 +119,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 				alerta.show();
 				return;
 			}
-			
+
 			Gson gson = new Gson();
 
 			// Converte o json obtido para classe Moeda
@@ -125,10 +128,10 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			// Converte o valor para reais
 			BigDecimal resultado = new BigDecimal(valor);
 			BigDecimal rate = new BigDecimal(String.valueOf(moeda.getRate()));
-			
+
 			resultado = resultado.multiply(rate);
-			
-			//Formata saida para 2 decimais
+
+			// Formata saida para 2 decimais
 			resultado = resultado.setScale(2, RoundingMode.CEILING);
 
 			// Informa a conversao para o usuario
@@ -140,6 +143,6 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 
 		}
 
-	}	
+	}
 
 }
